@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: "postgres:14-alpine"
+    ports:
+      - "15432:5432"
+    volumes:
+      - "./data:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "linketinder"
+    networks:
+      - postgres-compose-network
+
+  pgadmin:
+    image: "dpage/pgadmin4"
+    restart: always
+    ports:
+      - "16543:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    depends_on:
+      - postgres
+    networks:
+      - postgres-compose-network
+networks: 
+  postgres-compose-network:
+    driver: bridge
