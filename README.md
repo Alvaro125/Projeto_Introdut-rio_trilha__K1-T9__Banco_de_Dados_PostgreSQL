@@ -43,13 +43,13 @@ POSTGRES_DB=linketinder
 ```
 
 4. Execute o comando `docker-compose up -d` para iniciar os containers do PostgreSQL e PgAdmin.
-5. Acesse o PgAdmin em `http://localhost:3000` usando o login e senha `admin/admin`.
-6. Conecte-se ao banco de dados `linketinder` usando o servidor `localhost` e porta `5432`.
-7. Importe o arquivo `data.sql` no PgAdmin para inicializar o banco de dados com dados fictícios.
+5. Acesse o PgAdmin em `http://localhost:16543` usando o login e senha `admin@example.com/admin`.
+6. Conecte-se ao banco de dados `linketinder` usando o servidor `postgres` e porta `5432`.
+7. Importe o arquivo `init.sql` no PgAdmin para inicializar o banco de dados com dados fictícios.
 
 **Observações:**
 
-* O arquivo `data.sql` é apenas um exemplo e pode ser modificado de acordo com suas necessidades.
+* O arquivo `init.sql` é apenas um exemplo e pode ser modificado de acordo com suas necessidades.
 * As variáveis de ambiente no arquivo `.env` podem ser personalizadas.
 
 **Links Úteis:**
