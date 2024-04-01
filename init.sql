@@ -29,7 +29,7 @@ CREATE TABLE "legalpeople" (
 );
 
 CREATE TABLE "skills" (
-  "idPerson" SERIAL,
+  "id" SERIAL PRIMARY KEY,
   "title" varchar NOT NULL,
   "description" text
 );
@@ -58,8 +58,6 @@ ALTER TABLE "naturalpeople" ADD FOREIGN KEY ("idPerson") REFERENCES "people" ("i
 
 ALTER TABLE "legalpeople" ADD FOREIGN KEY ("idPerson") REFERENCES "people" ("id");
 
-ALTER TABLE "skills" ADD FOREIGN KEY ("idPerson") REFERENCES "people" ("id");
-
 ALTER TABLE "jobs" ADD FOREIGN KEY ("idLegalPerson") REFERENCES "legalpeople" ("idPerson");
 
 ALTER TABLE "jobs" ADD FOREIGN KEY ("local") REFERENCES "address" ("id");
@@ -68,29 +66,39 @@ ALTER TABLE "match" ADD FOREIGN KEY ("idJob") REFERENCES "jobs" ("id");
 
 ALTER TABLE "match" ADD FOREIGN KEY ("likeNaturalPerson") REFERENCES "naturalpeople" ("idPerson");
 
-INSERT INTO public.address ("id", "country", "state", "cep") VALUES 
-(1, 'Brazil', 'Sao Paulo', '01001000'),
-(2, 'Brazil', 'Rio de Janeiro', '20040000'),
-(3, 'Brazil', 'Brasilia', '70000000'),
-(4, 'Brazil', 'Salvador', '40000000'),
-(5, 'Brazil', 'Fortaleza', '60000000'),
-(6, 'Brasil', 'São Paulo', '01001000'),
-(7, 'Brasil', 'Rio de Janeiro', '20040001'),
-(8, 'Brasil', 'Minas Gerais', '30110010'),
-(9, 'Brasil', 'Bahia', '40010000'),
-(10, 'Brasil', 'Paraná', '80010000');
+CREATE TABLE "skills_people" (
+  "skills_id" integer,
+  "people_id" integer,
+  PRIMARY KEY ("skills_id", "people_id")
+);
 
-INSERT INTO public.people ("id", "email", "name", "description", "address", "password", "created_at", "updated_at", "deleted_at") VALUES 
-(1, 'john.doe@example.com', 'John Doe', 'Description for John Doe', 1, 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-(2, 'jane.doe@example.com', 'Jane Doe', 'Description for Jane Doe', 2, 'password456', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-(3, 'alice.smith@example.com', 'Alice Smith', 'Description for Alice Smith', 3, 'password789', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-(4, 'bob.johnson@example.com', 'Bob Johnson', 'Description for Bob Johnson', 4, 'passwordabc', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-(5, 'emma.watson@example.com', 'Emma Watson', 'Description for Emma Watson', 5, 'passworddef', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-(6, 'joao@example.com', 'João', 'Description 1', 6, 'senha123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-(7, 'maria@example.com', 'Maria', 'Description 2', 7, 'senha456', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-(8, 'carlos@example.com', 'Carlos', 'Description 3', 8, 'senha789', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-(9, 'ana@example.com', 'Ana', 'Description 4', 9, 'senha101112', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
-(10, 'pedro@example.com', 'Pedro', 'Description 5', 10, 'senha131415', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
+ALTER TABLE "skills_people" ADD FOREIGN KEY ("skills_id") REFERENCES "skills" ("id");
+
+ALTER TABLE "skills_people" ADD FOREIGN KEY ("people_id") REFERENCES "people" ("id");
+
+INSERT INTO public.address ("country", "state", "cep") VALUES 
+('Brazil', 'Sao Paulo', '01001000'),
+('Brazil', 'Rio de Janeiro', '20040000'),
+('Brazil', 'Brasilia', '70000000'),
+('Brazil', 'Salvador', '40000000'),
+('Brazil', 'Fortaleza', '60000000'),
+('Brasil', 'São Paulo', '01001000'),
+('Brasil', 'Rio de Janeiro', '20040001'),
+('Brasil', 'Minas Gerais', '30110010'),
+('Brasil', 'Bahia', '40010000'),
+('Brasil', 'Paraná', '80010000');
+
+INSERT INTO public.people ("email", "name", "description", "address", "password", "created_at", "updated_at", "deleted_at") VALUES 
+('john.doe@example.com', 'John Doe', 'Description for John Doe', 1, 'password123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+('jane.doe@example.com', 'Jane Doe', 'Description for Jane Doe', 2, 'password456', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+('alice.smith@example.com', 'Alice Smith', 'Description for Alice Smith', 3, 'password789', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+('bob.johnson@example.com', 'Bob Johnson', 'Description for Bob Johnson', 4, 'passwordabc', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+('emma.watson@example.com', 'Emma Watson', 'Description for Emma Watson', 5, 'passworddef', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+('joao@example.com', 'João', 'Description 1', 6, 'senha123', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+('maria@example.com', 'Maria', 'Description 2', 7, 'senha456', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+('carlos@example.com', 'Carlos', 'Description 3', 8, 'senha789', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+('ana@example.com', 'Ana', 'Description 4', 9, 'senha101112', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL),
+('pedro@example.com', 'Pedro', 'Description 5', 10, 'senha131415', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);
 
 INSERT INTO public.legalpeople ("idPerson", "cnpj") VALUES 
 (1, '12345678000100'),
@@ -106,3 +114,22 @@ INSERT INTO public.naturalpeople ("idPerson", "cpf", "age") VALUES
 (9, '13579246800', 35),
 (10, '11223344500', 45);
 
+INSERT INTO skills ("title", "description") VALUES 
+('Java', 'Programming language'),
+('JavaScript', 'Programming language'),
+('Python', 'Programming language');
+
+INSERT INTO skills_people ("skills_id", "people_id") VALUES 
+(1, 1),
+(2, 1),
+(3, 2);
+
+INSERT INTO skills ("title", "description") VALUES 
+('SQL', 'Programming language'),
+('C#', 'Programming language'),
+('Ruby', 'Programming language');
+
+INSERT INTO skills_people ("skills_id", "people_id") VALUES 
+(4, 6),
+(5, 7),
+(6, 7);
